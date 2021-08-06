@@ -64,20 +64,24 @@ namespace HealOnHit
             {
                 path = path.Substring(0, loc);
                 path = path + "\\config.xml";
-                HealOnHit.Log(path);
+                //HealOnHit.Log(path);
                 try
                 {
                     XmlDocument config = new XmlDocument();
                     config.Load(path);
-                    XmlNode node = config.SelectSingleNode("HealOnHit").ChildNodes.Item(0);
+                    XmlNode rootNode = config.SelectSingleNode("HealOnHit");
+                    XmlNode node =rootNode.SelectSingleNode("ConvertRate");
                     float rate = float.Parse(node.InnerText);
                     if (rate >= 0)
+                    {
                         HealOnHit.ConvertRate = rate;
-                    //HealOnHit.Log("Debug:HealOnHit, rate=" + rate.ToString());
+                        HealOnHit.Log("HealOnHit: convert rate=" + rate.ToString());
+                    }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    HealOnHit.Log("HealOnHit: path exception");
+                    //HealOnHit.Log("HealOnHit: cannot parse config.xml, " + e.ToString());
+                    HealOnHit.Log("HealOnHit: cannot parse config.xml, use default value.");
                 }
             }
             else
