@@ -56,33 +56,47 @@ namespace HealOnHit
     {
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
         {
-            //HealOnHit.Log("HealOnHitModuleBase.OnGameStart");
             HealOnHit.Log("HealOnHit: Running.");
-            string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string path;
+            try
+            {
+                 path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            }
+            catch (Exception)
+            {
+                HealOnHit.Log("HealOnHit: cannot parse config.xml, use default value.");
+                return;
+            };
+
             int loc = path.LastIndexOf('\\');
             if (loc != -1)
             {
                 path = path.Substring(0, loc);
-                path = path + "\\config.xml";
-                HealOnHit.Log(path);
+                path += "\\config.xml";
+                //HealOnHit.Log(path);
                 try
                 {
                     XmlDocument config = new XmlDocument();
                     config.Load(path);
-                    XmlNode node = config.SelectSingleNode("HealOnHit").ChildNodes.Item(0);
+                    XmlNode rootNode = config.SelectSingleNode("HealOnHit");
+                    XmlNode node =rootNode.SelectSingleNode("ConvertRate");
                     float rate = float.Parse(node.InnerText);
                     if (rate >= 0)
+                    {
                         HealOnHit.ConvertRate = rate;
-                    //HealOnHit.Log("Debug:HealOnHit, rate=" + rate.ToString());
+                        HealOnHit.Log("HealOnHit: convert rate=" + rate.ToString());
+                    }
                 }
                 catch (Exception)
                 {
-                    HealOnHit.Log("HealOnHit: path exception");
+                    HealOnHit.Log("HealOnHit: cannot parse config.xml, use default value.");
+                    return;
                 }
             }
             else
             {
                 HealOnHit.Log("HealOnHit: path error");
+                return;
             }
         }
 
@@ -90,7 +104,6 @@ namespace HealOnHit
         {
             base.OnMissionBehaviourInitialize(mission);
             mission.AddMissionBehaviour(new HealOnHit());
-            //HealOnHit.Log("Debug: HealOnHitModuleBase.OnMissionBehaviourInitialize");
         }
     }
 }
