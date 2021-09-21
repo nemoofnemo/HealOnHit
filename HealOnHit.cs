@@ -87,7 +87,7 @@ namespace HealOnHit
                         HealOnHit.Log("HealOnHit: convert rate=" + rate.ToString());
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     HealOnHit.Log("HealOnHit: cannot parse config.xml, use default value.");
                     return;
