@@ -23,7 +23,7 @@ namespace HealOnHit
             InformationManager.DisplayMessage(new InformationMessage(text, new Color(0f, 1f, 0f, 0.5f)));
         }
 
-        public override void OnScoreHit(Agent affectedAgent, Agent affectorAgent, WeaponComponentData attackerWeapon, bool isBlocked, float damage, float movementSpeedDamageModifier, float hitDistance, AgentAttackType attackType, float shotDifficulty, BoneBodyPartType victimHitBodyPart)
+        public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, int damage, in MissionWeapon affectorWeapon)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace HealOnHit
                 {
                     if (affectorAgent.Character != null && affectedAgent.Character != null)
                     {
-                        if (affectorAgent == Agent.Main && damage > 0f)
+                        if (affectorAgent == Agent.Main && damage > 0)
                         {
                             float num = affectorAgent.Health + damage * HealOnHit.ConvertRate;
                             if (num >= affectorAgent.HealthLimit)
@@ -52,6 +52,7 @@ namespace HealOnHit
             }
         }
     }
+
     public class HealOnHitModuleBase : MBSubModuleBase
     {
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
@@ -87,7 +88,7 @@ namespace HealOnHit
                         HealOnHit.Log("HealOnHit: convert rate=" + rate.ToString());
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     HealOnHit.Log("HealOnHit: cannot parse config.xml, use default value.");
                     return;
