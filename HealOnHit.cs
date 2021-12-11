@@ -6,15 +6,15 @@ using TaleWorlds.MountAndBlade;
 
 namespace HealOnHit
 {
-    public class HealOnHit : MissionBehaviour
+    public class HealOnHit : MissionBehavior
     {
         public static float ConvertRate = 0.2f;
 
-        public override MissionBehaviourType BehaviourType
+        public override MissionBehaviorType BehaviorType
         {
             get
             {
-                return MissionBehaviourType.Other;
+                return MissionBehaviorType.Other;
             }
         }
 
@@ -101,10 +101,10 @@ namespace HealOnHit
             }
         }
 
-        public override void OnMissionBehaviourInitialize(Mission mission)
+        public override void OnMissionBehaviorInitialize(Mission mission)
         {
-            base.OnMissionBehaviourInitialize(mission);
-            mission.AddMissionBehaviour(new HealOnHit());
+            base.OnMissionBehaviorInitialize(mission);
+            mission.AddMissionBehavior(new HealOnHit());
         }
     }
 }
